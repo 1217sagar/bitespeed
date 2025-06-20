@@ -17,12 +17,10 @@ npm install
 
 ### 2. Database Setup
 - Ensure PostgreSQL is running locally.
-- Create a database and user (optional):
+- Create a database:
   ```sh
   sudo -u postgres psql
   CREATE DATABASE bitespeed;
-  CREATE USER bitespeed_user WITH PASSWORD 'yourpassword';
-  GRANT ALL PRIVILEGES ON DATABASE bitespeed TO bitespeed_user;
   \q
   ```
 - Copy `.env.example` to `.env` and update credentials if needed:
