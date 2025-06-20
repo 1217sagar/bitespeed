@@ -8,7 +8,9 @@ export interface IdentifyInput {
 
 export class ContactService {
   async identifyContact({ email, phoneNumber }: IdentifyInput) {
-    logger.info(`identifyContact called with email: ${email}, phoneNumber: ${phoneNumber}`);
+    logger.info(
+      `identifyContact called with email: ${email}, phoneNumber: ${phoneNumber}`
+    );
     if (!email && !phoneNumber) {
       logger.error("At least one of email or phoneNumber is required.");
       throw new Error("At least one of email or phoneNumber is required.");
@@ -23,7 +25,9 @@ export class ContactService {
     let allContacts = await this.getAllLinkedContacts(contacts);
     let { primary, primaries } = this.getPrimaryContacts(allContacts);
     if (primaries.length > 1) {
-      logger.info(`Multiple primaries found (${primaries.length}). Merging primaries.`);
+      logger.info(
+        `Multiple primaries found (${primaries.length}). Merging primaries.`
+      );
       await this.mergePrimaries(primaries, primary);
       allContacts = await this.getAllLinkedContacts([primary]);
     }
@@ -59,7 +63,9 @@ export class ContactService {
   }
 
   private async findMatchingContacts(email?: string, phoneNumber?: string) {
-    logger.info(`Searching for contacts with email: ${email}, phoneNumber: ${phoneNumber}`);
+    logger.info(
+      `Searching for contacts with email: ${email}, phoneNumber: ${phoneNumber}`
+    );
     return prisma.contact.findMany({
       where: {
         OR: [
@@ -72,7 +78,9 @@ export class ContactService {
   }
 
   private async createPrimaryContact(email?: string, phoneNumber?: string) {
-    logger.info(`Creating primary contact with email: ${email}, phoneNumber: ${phoneNumber}`);
+    logger.info(
+      `Creating primary contact with email: ${email}, phoneNumber: ${phoneNumber}`
+    );
     const newContact = await prisma.contact.create({
       data: {
         email,
@@ -89,7 +97,11 @@ export class ContactService {
   }
 
   private async getAllLinkedContacts(contacts: any[]) {
-    logger.info(`Getting all linked contacts for ids: [${contacts.map((c) => c.id).join(", ")}]`);
+    logger.info(
+      `Getting all linked contacts for ids: [${contacts
+        .map((c) => c.id)
+        .join(", ")}]`
+    );
     let allContacts = [...contacts];
     let toCheck = [...contacts];
     const seenIds = new Set(allContacts.map((c) => c.id));
@@ -119,7 +131,9 @@ export class ContactService {
     const primary = allContacts.reduce((a, b) =>
       a.createdAt < b.createdAt ? a : b
     );
-    logger.info(`Primary contacts found: [${primaries.map((c: any) => c.id).join(", ")}]`);
+    logger.info(
+      `Primary contacts found: [${primaries.map((c: any) => c.id).join(", ")}]`
+    );
     return { primary, primaries };
   }
 
@@ -127,7 +141,9 @@ export class ContactService {
     logger.info(`Merging primaries. Oldest primary: ${oldestPrimary.id}`);
     for (const p of primaries) {
       if (p.id !== oldestPrimary.id) {
-        logger.info(`Updating contact ${p.id} to secondary, linking to ${oldestPrimary.id}`);
+        logger.info(
+          `Updating contact ${p.id} to secondary, linking to ${oldestPrimary.id}`
+        );
         await prisma.contact.update({
           where: { id: p.id },
           data: {
@@ -144,7 +160,9 @@ export class ContactService {
   }
 
   private getUniqueEmails(allContacts: any[]) {
-    const emails = Array.from(new Set(allContacts.map((c) => c.email).filter(Boolean)));
+    const emails = Array.from(
+      new Set(allContacts.map((c) => c.email).filter(Boolean))
+    );
     logger.info(`Unique emails: [${emails.join(", ")}]`);
     return emails;
   }
@@ -162,7 +180,9 @@ export class ContactService {
     phoneNumber?: string,
     linkedId?: number
   ) {
-    logger.info(`Creating secondary contact with email: ${email}, phoneNumber: ${phoneNumber}, linkedId: ${linkedId}`);
+    logger.info(
+      `Creating secondary contact with email: ${email}, phoneNumber: ${phoneNumber}, linkedId: ${linkedId}`
+    );
     return prisma.contact.create({
       data: {
         email,
