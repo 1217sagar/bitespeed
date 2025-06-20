@@ -10,12 +10,7 @@ This service identifies and consolidates customer contacts across multiple purch
 
 ## Setup Instructions
 
-### 1. Clone & Install Dependencies
-```sh
-npm install
-```
-
-### 2. Database Setup
+### 1. Database Setup
 - Ensure PostgreSQL is running locally.
 - Create a database:
   ```sh
@@ -23,20 +18,21 @@ npm install
   CREATE DATABASE bitespeed;
   \q
   ```
+- Run create table sql command from file ~/bitespeed/prisma/migrations/20250620090959_init/migration.sql in DB. 
 - Copy `.env.example` to `.env` and update credentials if needed:
   ```sh
   cp .env.example .env
   # Edit .env as needed
   ```
 
-### 3. Run Prisma Migrations
+### 3. Build Command
 ```sh
-npx prisma migrate dev --name init
+  npm install && npx prisma migrate deploy
 ```
 
 ### 4. Start the Server
 ```sh
-npm run dev
+  npm run start
 ```
 
 Server runs on `http://localhost:3000` by default.
